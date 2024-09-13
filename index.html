@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile List with Dynamic Search</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        align-items: flex-start;
+      }
+
+      .user-profile {
+        margin-bottom: 20px;
+        background-color: rgb(80, 124, 124);
+        border: 5px solid teal;
+        width: 250px;
+        height: 200px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-evenly;
+        color: aliceblue;
+        border-radius: 10px;
+      }
+
+      b {
+        color: brown;
+      }
+
+      .navbar {
+        background-color: teal;
+        height: 50px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .navbar > form {
+        height: 55%;
+        width: 40%;
+        background-color: rgb(80, 124, 124);
+        display: flex;
+        justify-content: space-between;
+      }
+
+      form > input {
+        width: 70%;
+        height: 100%;
+        border: none;
+        border-radius: 5px;
+        padding-left: 10px;
+        font-size: 17px;
+      }
+
+      form > button {
+        height: 100%;
+        width: 20%;
+        background-color: brown;
+        color: aliceblue;
+        font-size: 17px;
+        font-weight: 700;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const users = [
+      {
+        id: 1,
+        name: "John Doe",
+        email: "john.doe@example.com",
+        age: 28,
+        address: "123 Main St, New York, NY",
+        phone: "123-456-7890",
+        occupation: "Software Developer",
+        active: true,
+      },
+      {
+        id: 2,
+        name: "Jane Smith",
+        email: "jane.smith@example.com",
+        age: 34,
+        address: "456 Elm St, Los Angeles, CA",
+        phone: "234-567-8901",
+        occupation: "Graphic Designer",
+        active: true,
+      },
+      {
+        id: 3,
+        name: "Emily Johnson",
+        email: "emily.johnson@example.com",
+        age: 22,
+        address: "789 Pine St, Chicago, IL",
+        phone: "345-678-9012",
+        occupation: "Marketing Coordinator",
+        active: false,
+      },
+      {
+        id: 4,
+        name: "Michael Brown",
+        email: "michael.brown@example.com",
+        age: 40,
+        address: "101 Maple St, Houston, TX",
+        phone: "456-789-0123",
+        occupation: "Project Manager",
+        active: true,
+      },
+      {
+        id: 5,
+        name: "Sarah Davis",
+        email: "sarah.davis@example.com",
+        age: 30,
+        address: "202 Oak St, Phoenix, AZ",
+        phone: "567-890-1234",
+        occupation: "Accountant",
+        active: true,
+      },
+      {
+        id: 6,
+        name: "David Wilson",
+        email: "david.wilson@example.com",
+        age: 26,
+        address: "303 Cedar St, San Francisco, CA",
+        phone: "678-901-2345",
+        occupation: "Data Scientist",
+        active: false,
+      },
+      {
+        id: 7,
+        name: "Sophia Martinez",
+        email: "sophia.martinez@example.com",
+        age: 29,
+        address: "404 Birch St, Denver, CO",
+        phone: "789-012-3456",
+        occupation: "UX Designer",
+        active: true,
+      },
+      {
+        id: 8,
+        name: "Daniel Lee",
+        email: "daniel.lee@example.com",
+        age: 33,
+        address: "505 Walnut St, Miami, FL",
+        phone: "890-123-4567",
+        occupation: "Business Analyst",
+        active: false,
+      },
+      {
+        id: 9,
+        name: "Olivia Harris",
+        email: "olivia.harris@example.com",
+        age: 27,
+        address: "606 Redwood St, Atlanta, GA",
+        phone: "901-234-5678",
+        occupation: "HR Specialist",
+        active: true,
+      },
+      {
+        id: 10,
+        name: "James Clark",
+        email: "james.clark@example.com",
+        age: 35,
+        address: "707 Spruce St, Seattle, WA",
+        phone: "012-345-6789",
+        occupation: "DevOps Engineer",
+        active: false,
+      },
+    ];
+
+    const UserProfile = ({
+      name,
+      email,
+      age,
+      address,
+      phone,
+      occupation,
+      active,
+    }) => {
+      return (
+        <div className="user-profile">
+          <div className="name">
+            <b>Name:</b> {name}
+          </div>
+          <div className="email">
+            <b>E-mail:</b> {email}
+          </div>
+          <div className="age">
+            <b>Age:</b> {age}
+          </div>
+          <div className="address">
+            <b>Address:</b> {address}
+          </div>
+          <div className="phone">
+            <b>Phone:</b> {phone}
+          </div>
+          <div className="occupation">
+            <b>Occupation:</b> {occupation}
+          </div>
+          <div className="active">
+            <b>Active:</b> {active ? "Yes" : "No"}
+          </div>
+        </div>
+      );
+    };
+
+    const App = () => {
+      const [searchInput, setSearchInput] = React.useState("");
+      const [searchTerm, setSearchTerm] = React.useState("");
+
+      const handleChange = (e) => {
+        setSearchInput(e.target.value);
+      };
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        setSearchTerm(searchInput);
+      };
+
+      const filteredUser = users.filter((ele) => {
+        return ele.name.toLowerCase().includes(searchTerm.toLowerCase());
+      });
+
+      return (
+        <div>
+          <div className="navbar">
+            <form action="#" onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="name"
+                placeholder="Search for Username"
+                onChange={handleChange}
+              />
+              <button>Search</button>
+            </form>
+          </div>
+          <div className="container">
+            {filteredUser.length > 0 ? (
+              filteredUser.map((ele) => {
+                return <UserProfile key={ele.id} {...ele} />;
+              })
+            ) : (
+              <h1>User Not Found</h1>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</html>
