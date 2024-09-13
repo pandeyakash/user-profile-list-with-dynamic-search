@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Profile List with Dynamic Search</title>
     <style>
+      /* Basic styles for overall layout */
       * {
         margin: 0;
         padding: 0;
       }
 
+      /* Styling for the container that holds user profiles */
       .container {
         display: flex;
         width: 100%;
@@ -18,6 +20,7 @@
         align-items: flex-start;
       }
 
+      /* Styling for each user profile card */
       .user-profile {
         margin-bottom: 20px;
         background-color: rgb(80, 124, 124);
@@ -33,10 +36,12 @@
         border-radius: 10px;
       }
 
+      /* Styling for text inside the user profile */
       b {
         color: brown;
       }
 
+      /* Navbar styling for search bar */
       .navbar {
         background-color: teal;
         height: 50px;
@@ -46,6 +51,7 @@
         align-items: center;
       }
 
+      /* Styling for the search form inside the navbar */
       .navbar > form {
         height: 55%;
         width: 40%;
@@ -54,6 +60,7 @@
         justify-content: space-between;
       }
 
+      /* Styling for search input */
       form > input {
         width: 70%;
         height: 100%;
@@ -63,6 +70,7 @@
         font-size: 17px;
       }
 
+      /* Styling for search button */
       form > button {
         height: 100%;
         width: 20%;
@@ -83,6 +91,7 @@
   <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
+    // Array of user data objects
     const users = [
       {
         id: 1,
@@ -186,6 +195,7 @@
       },
     ];
 
+    // UserProfile Component to display individual user details
     const UserProfile = ({
       name,
       email,
@@ -222,39 +232,48 @@
       );
     };
 
+    // Main App Component
     const App = () => {
+      // State to store the input value and search term
       const [searchInput, setSearchInput] = React.useState("");
       const [searchTerm, setSearchTerm] = React.useState("");
 
+      // Function to update search input state when typing
       const handleChange = (e) => {
         setSearchInput(e.target.value);
       };
 
+      // Function to update the search term on form submit
       const handleSubmit = (e) => {
-        e.preventDefault();
-        setSearchTerm(searchInput);
+        e.preventDefault(); // Prevents page reload on form submit
+        setSearchTerm(searchInput); // Update search term state
       };
 
+      // Filter the user list based on the search term
       const filteredUser = users.filter((ele) => {
         return ele.name.toLowerCase().includes(searchTerm.toLowerCase());
       });
 
       return (
         <div>
+          {/* Navbar with search functionality */}
           <div className="navbar">
             <form action="#" onSubmit={handleSubmit}>
               <input
                 type="text"
                 name="name"
                 placeholder="Search for Username"
-                onChange={handleChange}
+                onChange={handleChange} // Triggered when typing in search input
               />
               <button>Search</button>
             </form>
           </div>
+
+          {/* Container to display the filtered users */}
           <div className="container">
             {filteredUser.length > 0 ? (
               filteredUser.map((ele) => {
+                // Map over filtered users and render UserProfile components
                 return <UserProfile key={ele.id} {...ele} />;
               })
             ) : (
@@ -265,6 +284,7 @@
       );
     };
 
+    // Rendering the App component
     const root = ReactDOM.createRoot(document.getElementById("root"));
     root.render(<App />);
   </script>
